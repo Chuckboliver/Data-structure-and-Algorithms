@@ -1,29 +1,30 @@
 import math
+
 def pm(ls):
     size = len(ls)
-    #print(f"On start --> {ls}")
-    if size == 2:
+    if size == 2:# if size=2 swap then return as list
         ls[0],ls[1] = ls[1],ls[0]
         return ls
-    curmem = memory.setdefault(size,size-1)
-    core = ls.pop(curmem)
-    #print(f"Debug :: {curmem} {core}")
-    memory[size] = (memory[size]+1)%size
-    if memory[size] == 0:#get subPattern of low level
-        pm(ls)
-        ls.insert(memory[size],core)
+    memIndex.setdefault(size,size-1) #write index of each level in dict
+    coreNumber = ls.pop(memIndex[size]) #split coreNumber from subPattern and wait for insert
+    memIndex[size] = (memIndex[size]+1)%size #step up index by 1    if index > size-1 then it return to 0
+    if memIndex[size] == 0:#get subPattern of low level if index run to 0
+        pm(ls)#call this function again to get subPattern 
+        ls.insert(memIndex[size],coreNumber)#insert coreNumber in index then return to called function
         return ls
-    else:
-        ls.insert(memory[size],core)
-        return ls
-def merge(ls):
+    else: #only insert coreNumber in index  then return to called function
+        ls.insert(memIndex[size],coreNumber)
+        return ls 
+def getPermu(ls):
+    res = list()#list store permutation answer
     for _ in range(math.factorial(len(ls))):
-        res.append([*map(int,pm(ls))])
-        
-memory = dict()#remember index of each level 
-res = list() #list store answer
+        res.append([*map(int,pm(ls))]) 
+    return res
+memIndex = dict()#remember index of each level 
+
+
 print("*** Fun with permute ***")
 lst = list(map(int,input("input : ").split(",")))
 print(f"Original Cofllection:  {lst}")
-merge(lst)
-print(f"Collection of distinct numbers:\n {res}")
+ans = getPermu(lst)
+print(f"Collection of distinct numbers:\n {ans}")
