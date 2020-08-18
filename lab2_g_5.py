@@ -10,4 +10,4 @@ class funString :
 
 word,flag = input("Enter String and Number of Function : ").split()
 t1 = funString(word,flag)
-print(t1)
+print(t1) 
