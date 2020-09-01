@@ -1,9 +1,10 @@
 class Conversion :
-    def __init__(self):
+    def __init__(self,expression = ""):
         self.top = -1
         self.array = list()
-        self.output = list()
+        self.output = ""
         self.precedence = {"+":1, "-":1, "*":2, "/":2, "^":3}
+        self.expression =expression
     def isEmpty(self):
         return True if self.top == -1 else False
     def peek(self):
@@ -19,7 +20,7 @@ class Conversion :
         self.top += 1
         self.array.append(element)
     def isOperand(self,ch):
-        return ch.isalpha()
+        return ch.isalpha() or ch.isdigit()
     def notGreater(self,key) :
         try:
             a = self.precedence[key]
@@ -27,46 +28,63 @@ class Conversion :
             return True if a<=b else False
         except KeyError:
             return False
-    def InfixToPostfix(self,expression):
-        for char in expression:
-            print(f"Current char --> {char}")
+    def __str__(self):
+        return self.output
+    def InfixToPostfix(self):
+        self.__init__(expression= self.expression)
+        print(f"Inbound InPo : {self.expression}")
+        for char in self.expression:
+            #print(f"Current char --> {char}")
             if self.isOperand(char):
-                self.output.append(char)
-                print(f"Append {char} in output --> Output : {self.output}")
+                self.output += char
+                #print(f"Append {char} in output --> Output : {self.output}")
             elif char == "(":
                 self.push(char)
-                print(f"Push ( in stack.")
+                #print(f"Push ( in stack.")
             elif char == ")":
-                print(f") found --> pop stack and append to output until (\n--------------------------------------")
+                #print(f") found --> pop stack and append to output until (\n--------------------------------------")
                 while not self.isEmpty() and self.peek() != "(":
-                    operand = self.pop()
-                    self.output.append(operand)
-                    print(f"Pop {operand} from stack and Append {operand} to output. --> Stack : {self.array}, Output : {self.output}")
-                # if not self.isEmpty() and self.peek() != "(" :
-                #     return -1
-                # else :
-                last = self.pop()
-                print(f"Current output : {self.output}")
-                print(f"Last pop is {last} --> Stack : {self.array}\n--------------------------------------")
+                    operator = self.pop()
+                    self.output += operator
+                    #print(f"Pop {operator} from stack and Append {operator} to output. --> Stack : {self.array}, Output : {self.output}")
+                if not self.isEmpty() and self.peek() != "(" :
+                    return -1
+                else :
+                    last = self.pop()
+                #print(f"Current output : {self.output}")
+                #print(f"Last pop is {last} --> Stack : {self.array}\n--------------------------------------")
             else :
-                print(f"Operand {char} found --> pop stack until precedence is lower\n**************************************")
+                #print(f"Operator {char} found --> pop stack until precedence is lower\n**************************************")
                 while not self.isEmpty() and self.notGreater(char):
-                    operand = self.pop()
-                    self.output.append(operand)
-                    print(f"Pop {operand} from stack and Append {operand} to output. --> Stack : {self.array}, Output : {self.output}")
+                    operator = self.pop()
+                    self.output += operator
+                    #print(f"Pop {operator} from stack and Append {operator} to output. --> Stack : {self.array}, Output : {self.output}")
 
                 self.push(char)
-                print(f"Current output : {self.output}")
-                print(f"Push {char} to stack. --> Stack : {self.array}\n**************************************")
-        print(f"***Iterate over the expression end pop all the operator from the stack.***")
+                #print(f"Current output : {self.output}")
+                #print(f"Push {char} to stack. --> Stack : {self.array}\n**************************************")
+        #print(f"***Iterate over the expression end pop all the operator from the stack.***")
         while not self.isEmpty() :
-            operand = self.pop()
-            self.output.append(operand)
-            print(f"Pop {operand} from stack and Append {operand} to output. --> Stack : {self.array}, Output : {self.output}")
-        ans = "".join(self.output)
-        print(f"Infix-to-Postfix : {ans}")
-
+            operator = self.pop()
+            self.output += operator
+            #print(f"Pop {operator} from stack and Append {operator} to output. --> Stack : {self.array}, Output : {self.output}")
+        #print(f"Infix-to-Postfix : {self.output}")
+        self.expression = self.output
+        print(f"Out : {self.output} Ex : {self.expression}")
+        return self
+    def PostfixToInfix(self):
+        self.__init__(expression = self.expression)
+        print(f"Inbound PoIn : {self.expression}")
+        for char in self.expression:
+            if self.isOperand(char) :
+                self.push(char)
+            else :
+                operand1 = self.pop()
+                operand2 = self.pop()
+                self.push(operand2+char+operand1)
+        self.output = self.pop()
+        self.expression = self.output
+        print(f"Out : {self.output} Ex : {self.expression}")
+        return self
 exp = input()
-obj = Conversion()
-obj.InfixToPostfix(exp)
-
+print(Conversion(exp).InfixToPostfix())
