@@ -11,12 +11,12 @@ class List:
             self.size = 0
         else :
             self.head = head
-            t = self.head
+            tp = self.head
             self.size = 1
-            while t.next != None:
-                t = t.next
+            while tp.next != None:
+                tp = tp.next
                 self.size += 1
-                self.tail = t
+                self.tail = tp
     def __str__(self):
         s = "Linked data : "
         p = self.head
@@ -27,14 +27,14 @@ class List:
     def __len__(self):
         return self.size
     def append(self,data):
-        p = Node(data)
+        p = self.Node(data)
         if self.head == None:
             self.head = p
         else:
             t = self.head
-        while t.next != None:
-            t = t.next
-        t.next = p
+            while t.next != None:
+                t = t.next
+            t.next = p
         self.size += 1
     def nodeAt(self,i):
         p = self.head
@@ -71,3 +71,8 @@ class List:
                 p = p.next
             p.next = p.next.next
             self.size -= 1
+
+l = List()
+for i in range(1,100,2):
+    l.append(i)
+print(l)
