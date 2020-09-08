@@ -60,6 +60,7 @@ blueFreeze = 0
 RedAns = ""
 BlueAns = ""
 bombList = []
+waitForCollision = []
 Mistake = 0
 while not BlueTeamBomb.isEmpty():
     f = BlueTeamBomb.front()
@@ -74,32 +75,40 @@ while not BlueTeamBomb.isEmpty():
 print(bombList)
 blueFreeze = len(bombList)
 while not RedTeamBomb.isEmpty():
-    f = RedTeamBomb.front()
-    if f.n // 3 >= 1 : #Found Bomb 
-        #RedTeamBomb.front().n -= 3
-        #print(f"Current red : {RedTeamBomb}")
-        if len(bombList)>0:
-            nextBlueBomb = bombList.pop(0)
+    if RedTeamBomb.front().n //3 >= 1:#Found Bomb
+        #HaveRescueBomb
+        if len(bombList) > 0:
+            nextBomb = bombList.pop(0)
         else:
-            nextBlueBomb = None
-        #print(f"Next bBomb is : {nextBlueBomb}")
-        if nextBlueBomb is None:
-            RedTeamBomb.front().n -= 3
-            redExplode += 1
-        elif f.data == nextBlueBomb:
-            #print("MISTAKE")
+            nextBomb = None
+        #if same bomb type 
+        if RedTeamBomb.front().data == nextBomb:
             Mistake += 1
             RedTeamBomb.front().n -= 2
-            print(f"Mistake : {RedTeamBomb}")
-            #RedAns += nextBlueBomb
-        else:
-            RedAns += f.data*2+nextBlueBomb+f.data
+        #if Rescue fail (No rescue bomb)
+        elif nextBomb is None:
+            redExplode += 1
             RedTeamBomb.front().n -= 3
-        if RedTeamBomb.front().n == 0:
-            RedTeamBomb.dequeue()
-    else : #Not found
-        RedAns += RedTeamBomb.front().data * RedTeamBomb.front().n
-        RedTeamBomb.dequeue()
+            #if size = 0 --> no more bomb
+            if RedTeamBomb.front().n == 0:
+                RedTeamBomb.dequeue()
+            #Have wait for collision
+            if len(waitForCollision) > 0:
+                #Same bomb type --> collision
+                if waitForCollision[-1][0] == RedTeamBomb.front().data:
+                    RedTeamBomb.front().n += waitForCollision[-1][0]
+                    waitForCollision.pop()
+        #if Rescue success  
+        else:
+            pass
+    #Not found bomb but have rescue bomb
+    elif len(bombList) > 0:
+        notBomb = RedTeamBomb.dequeue()
+        RedTeamBomb.enqueue(notBomb.data,notBomb.n)
+    #Not found bomb and not have rescue bomb
+    else:
+        notBomb = RedTeamBomb.dequeue()
+        waitForCollision.append(tuple(notBomb.data,notBomb.n))
 
 nR = len(RedAns)
 nB = len(BlueAns)
@@ -111,3 +120,9 @@ print(f"Red Team :\n{nR}\n{RedAns[::-1]}\n{redExplode} Explosive(s) ! ! ! (HEAT)
 if Mistake > 0:
     print(f"Blue Team Made (a) Mistake(s) {Mistake} Bomb(s)")
 print(f"----------TENETTENET----------\n: maeT eulB\n{nB}\n{BlueAns[::-1]}\n(EZEERF) ! ! ! (s)evisolpxE {blueFreeze}")
+
+
+
+
+
+#Comment
