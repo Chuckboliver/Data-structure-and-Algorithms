@@ -104,5 +104,4 @@ for i in l:
 Tree.preOrder(root)
 printTree(root)
 
-deletion(root, 2)
 printTree(root)
