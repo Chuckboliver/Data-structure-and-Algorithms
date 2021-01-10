@@ -9,7 +9,7 @@ class AdjMatrix:
     def addEdge(self, v1:str, v2:str, wt:int):
         if 0 <= self.name[v1] < self.size and 0 <= self.name[v2] < self.size:
             self.matrix[self.name[v1]][self.name[v2]] = wt
-            #self.matrix[v2][v1] = wt
+            self.matrix[self.name[v2]][self.name[v1]] = wt
     def __len__(self):
         return self.size
     def __str__(self) -> str:
@@ -45,6 +45,7 @@ def dijkstra(graph:AdjMatrix, src:str, dst:str, vertexList):
                 dist[v] > dist[u] + matrix[u][v]:
                 dist[v] = dist[u] + matrix[u][v]
                 path[v] = vertexList[u]
+    print(dist)
     if dist[graph.name[dst]] == sys.maxsize:
         print(f"Not have path : {src} to {dst}")
     else:
