@@ -1,5 +1,9 @@
 from collections import deque
+
 class Node:
+    """
+    data node
+    """
     def __init__(self, data:int) -> None:
         self.key = data
         self.left = None
@@ -37,8 +41,55 @@ def insert(node:Node, key:int) -> Node:
         else:
             queue.append(temp.right)
     return node
+
+def is_mirror(root:Node) -> bool:
+    """
+    check if tree is symmetric or not.
+    """
+    def __is_mirror_check_util(left_node:Node, right_node:Node) -> bool:
+    
+        if left_node is None and right_node is None:
+            return True
+
+        if not left_node is None and\
+            not right_node is None and\
+            left_node.key == right_node.key:
+            return __is_mirror_check_util(left_node.left, right_node.right) and __is_mirror_check_util(left_node.right, right_node.left)
+        
+        return False
+    
+    return __is_mirror_check_util(root, root)
+
+def is_foldable(root:Node) -> bool:
+    """
+    check if tree is foldable or not.
+    """
+    def __is_foldable_util(left_node:Node, right_node:Node) -> bool:
+
+        if left_node is None and right_node is None:
+            return True
+
+        if not left_node is None and\
+            not right_node is None:
+            return __is_foldable_util(left_node.left, right_node.right) and __is_foldable_util(left_node.right, right_node.left)
+
+        return False
+    
+    return __is_foldable_util(root, root)
+
+def print_tree(node:Node, level:int = 0) -> None:
+    """
+    print binary tree
+    """
+    if node:
+        print_tree(node.right, level + 1)
+        print('   '*level, node.key)
+        print_tree(node.left, level + 1)
+
 if __name__ == "__main__":
     root = None
-    for i in range(5):
+    for i in list(map(int, input("Enter key to insert : ").split())):
         root = insert(root, i)
-    inorder(root)
+    print_tree(root)
+    print(f"Symmetric : {is_mirror(root)}")
+    print(f"Foldable : {is_foldable(root)}")
