@@ -7,20 +7,20 @@ class Node:
 
 class AVL:
 
-    def getBalanceFactor(self, node):
+    def get_balance_factor(self, node):
         if node is None:
             return 0
-        return self.getHeight(node.left) - self.getHeight(node.right)
+        return self.get_height(node.left) - self.get_height(node.right)
     def height(self, node):
         if node is None:
             return -1
         return 1 + max(self.height(node.left), self.height(node.right))
-    def getHeight(self, node):
+    def get_height(self, node):
         if node is None:
             return 0
         return node.height
 
-    def LeftRotate(self, root):
+    def left_rotate(self, root:Node) -> Node:
         #choose pivot
         y = root.right
         x = y.left
@@ -30,25 +30,25 @@ class AVL:
         root.right = x
 
         #update height
-        root.height = 1 + max(self.getHeight(root.left), self.getHeight(root.right))
-        y.height = 1 + max(self.getHeight(y.left), self.getHeight(y.right))
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
 
         return y
 
-    def RightRotate(self, root):
+    def right_rotate(self, root:Node) -> Node:
         y = root.left
         x = y.right
 
         y.right = root
         root.left = x
 
-        root.height = 1 + max(self.getHeight(root.left), self.getHeight(root.right))
-        y.height = 1 + max(self.getHeight(y.left), self.getHeight(y.right))
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
 
         return y
 
     
-    def insert(self, root, key):
+    def insert(self, root:Node, key:int) -> Node:
 
         #normal BST insert
         if not root:
@@ -59,49 +59,49 @@ class AVL:
             root.right = self.insert(root.right, key)
 
         #update height
-        root.height = 1 + max(self.getHeight(root.left), self.getHeight(root.right))
+        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
 
         #get Balance factor
-        balance = self.getBalanceFactor(root)
+        balance = self.get_balance_factor(root)
 
         #if unbalanced try out 4 cases
         #Right rotate
         if  balance > 1 and key < root.left.data:
-            return  self.RightRotate(root)
+            return  self.right_rotate(root)
         #Left rotate
         if balance < -1 and key > root.right.data:
-            return self.LeftRotate(root)
+            return self.left_rotate(root)
 
         #RightLeft rotate
         if balance < -1 and key < root.right.data:
-            root.right = self.RightRotate(root.right)
-            return self.LeftRotate(root)
+            root.right = self.right_rotate(root.right)
+            return self.left_rotate(root)
 
         #LeftRight rotate
         if balance > 1 and key > root.left.data:
-            root.left = self.LeftRotate(root.left)
-            return self.RightRotate(root)
+            root.left = self.left_rotate(root.left)
+            return self.right_rotate(root)
 
         return root
-    def preOrder(self, node):
+    def preorder(self, node:Node) -> None:
         if node:
             print(node.data,end=" ")
-            self.preOrder(node.left)
-            self.preOrder(node.right)
+            self.preorder(node.left)
+            self.preorder(node.right)
 
 
-def printTree(node, level = 0):
+def print_tree(node:Node, level:int = 0) -> None:
     if node:
-        printTree(node.right, level + 1)
+        print_tree(node.right, level + 1)
         print('   '*level, node.data)
-        printTree(node.left, level + 1)
+        print_tree(node.left, level + 1)
 l = list(map(int, input().split()))
 Tree = AVL()
 root = None
 for i in l:
     root = Tree.insert(root, i)
 
-Tree.preOrder(root)
-printTree(root)
+Tree.preorder(root)
+print_tree(root)
 
-printTree(root)
+print_tree(root)
