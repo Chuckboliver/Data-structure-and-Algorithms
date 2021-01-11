@@ -1,7 +1,9 @@
 from collections import deque
 
 class Node:
-
+    """
+    data node
+    """
     def __init__(self, key:str) -> None:
         self._data = key
         self._left = None
@@ -29,6 +31,9 @@ def expression_tree(postfix:str) -> Node:
     return stack.pop()
 
 def evaluate_expression_tree(root:Node) -> float:
+    """
+    evaluate value from expression tree.
+    """
     if root is None:
         return 0
     if root._left is None and root._right is None:

@@ -1,4 +1,7 @@
 class Node:
+    """
+    data node.
+    """
     def __init__(self, data) -> None:
         self.data = data
         self.left = None
@@ -6,15 +9,13 @@ class Node:
         self.height = 1
 
 class AVL:
-
+    """
+    AVL tree object.
+    """
     def get_balance_factor(self, node):
         if node is None:
             return 0
         return self.get_height(node.left) - self.get_height(node.right)
-    def height(self, node):
-        if node is None:
-            return -1
-        return 1 + max(self.height(node.left), self.height(node.right))
     def get_height(self, node):
         if node is None:
             return 0
@@ -95,13 +96,12 @@ def print_tree(node:Node, level:int = 0) -> None:
         print_tree(node.right, level + 1)
         print('   '*level, node.data)
         print_tree(node.left, level + 1)
-l = list(map(int, input().split()))
-Tree = AVL()
-root = None
-for i in l:
-    root = Tree.insert(root, i)
 
-Tree.preorder(root)
-print_tree(root)
 
-print_tree(root)
+if __name__ == "__main__":
+    l = list(map(int, input().split()))
+    Tree = AVL()
+    root: Node = None
+    for i in l:
+        root = Tree.insert(root, i)
+    print_tree(root)
