@@ -6,6 +6,9 @@ class Node:
         self.right = None
 
 def inorder(node:Node) -> None:
+    """
+    depth first traversal for binary tree 
+    """
     if node is None:
         return
     inorder(node.left)
