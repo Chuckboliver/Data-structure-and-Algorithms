@@ -1,2 +1,2 @@
 # :spades:Data Structure and Algorithm Lab :diamonds:
-Store code in data structure and algo lab at CE-KMITL
+* Store code in data structure and algo lab at CE-KMITL
